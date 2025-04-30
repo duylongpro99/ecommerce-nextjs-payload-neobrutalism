@@ -5,8 +5,8 @@ import { DM_Sans } from "next/font/google";
 const dmSans = DM_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Mindmap",
-  description: "Create your own mindmap",
+  title: "Flexible Store",
+  description: "Shopping with multiple products, flexible and customizable",
 };
 
 export default function RootLayout({
