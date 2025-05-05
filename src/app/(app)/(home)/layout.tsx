@@ -5,6 +5,7 @@ import { SearchFilter } from "./seacrch-filter";
 
 import { Category } from "@/payload-types";
 import configPromise from "@/payload.config";
+import { CustomCategory } from "./seacrch-filter/types";
 
 interface Props {
   children: React.ReactNode;
@@ -23,9 +24,10 @@ const Layout: React.FC<Props> = async ({ children }) => {
         exists: false,
       },
     },
+    sort: "name",
   });
 
-  const formattedData = data.docs.map((category) => ({
+  const formattedData: CustomCategory[] = data.docs.map((category) => ({
     ...category,
     subcategories: (category.subcategories?.docs || []).map((subcategory) => ({
       ...(subcategory as Category),

@@ -1,8 +1,9 @@
 import { Categories } from "./categories";
 import { SearchInput } from "./search-input";
+import { CustomCategory } from "./types";
 
 interface Props {
-  data: any;
+  data: CustomCategory[];
 }
 export const SearchFilter: React.FC<Props> = ({ data }): React.ReactNode => {
   return (
