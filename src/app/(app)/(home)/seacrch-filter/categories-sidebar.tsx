@@ -55,13 +55,15 @@ export const CategoriesSidebar: React.FC<Props> = ({
     }
   };
 
+  const bgColor = selectedCategory?.color ?? "white";
+
   return (
     <Sheet open={open} onOpenChange={handleOpenChange}>
       <SheetContent
         side="left"
         className="p-0 transition-none"
         style={{
-          backgroundColor: "white",
+          backgroundColor: bgColor,
         }}
       >
         <SheetHeader className="p-4 border-b">
