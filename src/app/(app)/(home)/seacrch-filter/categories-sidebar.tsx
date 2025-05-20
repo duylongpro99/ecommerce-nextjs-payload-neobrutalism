@@ -55,6 +55,13 @@ export const CategoriesSidebar: React.FC<Props> = ({
     }
   };
 
+  const onBack = () => {
+    if (parentCategories) {
+      setParentCategories(null);
+      setSelectedCategory(null);
+    }
+  };
+
   const bgColor = selectedCategory?.color ?? "white";
 
   return (
@@ -72,7 +79,7 @@ export const CategoriesSidebar: React.FC<Props> = ({
         <ScrollArea className="flex flex-col overflow-y-auto h-full pb-2">
           {parentCategories && (
             <button
-              onClick={() => {}}
+              onClick={onBack}
               className="w-full text-left p-4 hover:bg-black hover:text-white flex items-center text-base font-medium cursor-pointer"
             >
               <ChevronLeftIcon className="size-4 mr-2" />
