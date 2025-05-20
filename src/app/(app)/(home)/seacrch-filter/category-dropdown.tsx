@@ -6,6 +6,7 @@ import { useRef, useState } from "react";
 import { SubCategoryDropdown } from "./sub-category-dropdown";
 import { CustomCategory } from "./types";
 import { useDropdownPosition } from "./useDropdownPosition";
+import Link from "next/link";
 
 interface Props {
   category: CustomCategory;
@@ -32,6 +33,12 @@ export const CategoryDropdown: React.FC<Props> = ({
     setIsOpen(false);
   };
 
+  // const toggleDropdown = () => {
+  //   if (category?.subcategories?.docs?.length) {
+  //     setIsOpen(!isOpen);
+  //   }
+  // };
+
   const subCategoryPosition = getDropdownPosition();
 
   return (
@@ -40,6 +47,7 @@ export const CategoryDropdown: React.FC<Props> = ({
       ref={dropdownRef}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
+      // onClick={toggleDropdown}
     >
       <div className="relative">
         <Button
@@ -50,7 +58,9 @@ export const CategoryDropdown: React.FC<Props> = ({
             isOpen && "bg-white border-primary",
           )}
         >
-          {category.name}
+          <Link href={category.slug === "all" ? "/" : `/${category.slug}`}>
+            {category.name}
+          </Link>
         </Button>
         {category.subcategories?.length > 0 && (
           <div
