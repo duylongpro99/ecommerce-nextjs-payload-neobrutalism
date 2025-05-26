@@ -1,34 +1,36 @@
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { CustomCategory } from "./types";
-import { useState } from "react";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  CategoriesGetManyOutput,
+  CategoriesGetManyOutputSingle,
+} from "@/modules/categories/types";
+import { useTRPC } from "@/trpc/client";
+import { useQuery } from "@tanstack/react-query";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 interface Props {
   open: boolean;
-  data: CustomCategory[];
   onOpenChange: (open: boolean) => void;
 }
 
-export const CategoriesSidebar: React.FC<Props> = ({
-  open,
-  data,
-  onOpenChange,
-}) => {
-  const [parentCategories, setParentCategories] = useState<
-    CustomCategory[] | null
-  >(null);
+export const CategoriesSidebar: React.FC<Props> = ({ open, onOpenChange }) => {
+  const [parentCategories, setParentCategories] =
+    useState<CategoriesGetManyOutput | null>(null);
+
+  const tprc = useTRPC();
+  const { data } = useQuery(tprc.categories.getMany.queryOptions());
 
   const router = useRouter();
 
   const [selectedCategory, setSelectedCategory] =
-    useState<CustomCategory | null>(null);
+    useState<CategoriesGetManyOutputSingle | null>(null);
 
   const currentCategories = parentCategories ?? data ?? [];
 
@@ -38,9 +40,9 @@ export const CategoriesSidebar: React.FC<Props> = ({
     onOpenChange(open);
   };
 
-  const onClickCat = (cat: CustomCategory) => {
+  const onClickCat = (cat: CategoriesGetManyOutputSingle) => {
     if (cat.subcategories?.length) {
-      setParentCategories(cat.subcategories as CustomCategory[]);
+      setParentCategories(cat.subcategories as CategoriesGetManyOutput);
       setSelectedCategory(cat);
     } else {
       if (parentCategories && selectedCategory) {

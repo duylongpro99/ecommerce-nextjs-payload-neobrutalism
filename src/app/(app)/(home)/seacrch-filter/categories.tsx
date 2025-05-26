@@ -1,18 +1,18 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { CategoryDropdown } from "./category-dropdown";
-import { CustomCategory } from "./types";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { CategoriesGetManyOutput } from "@/modules/categories/types";
 import { ListFilterIcon } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { CategoriesSidebar } from "./categories-sidebar";
+import { CategoryDropdown } from "./category-dropdown";
 
 interface Props {
-  data: CustomCategory[];
+  data: CategoriesGetManyOutput;
 }
 
-export const Categories: React.FC<Props> = ({ data }) => {
+export const Categories: React.FC<Props> = ({ data = [] }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const measureRef = useRef<HTMLDivElement>(null);
   const viewAllRef = useRef<HTMLDivElement>(null);
@@ -41,10 +41,6 @@ export const Categories: React.FC<Props> = ({ data }) => {
       const viewAllWidth = viewAllRef.current.offsetWidth;
       const availableWidth = containerWidth - viewAllWidth;
 
-      console.log(":availableWidth", availableWidth);
-      console.log(":containerWidth", containerWidth);
-      console.log(":viewAllWidth", viewAllWidth);
-
       const items = Array.from(measureRef.current.children);
       let totalWidth = 0;
       let visible = 0;
@@ -69,11 +65,7 @@ export const Categories: React.FC<Props> = ({ data }) => {
 
   return (
     <div className="relative w-full">
-      <CategoriesSidebar
-        open={isSidebarOpen}
-        onOpenChange={setIsSidebarOpen}
-        data={data}
-      />
+      <CategoriesSidebar open={isSidebarOpen} onOpenChange={setIsSidebarOpen} />
       <div
         ref={measureRef}
         className="absolute opacity-0 pointer-events-none flex"
