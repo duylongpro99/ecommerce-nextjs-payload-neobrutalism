@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useTRPC } from "@/trpc/client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DM_Sans } from "next/font/google";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -27,12 +27,15 @@ const dmSans = DM_Sans({ subsets: ["latin"] });
 export const SignInView: React.FC = () => {
   const router = useRouter();
   const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
   const login = useMutation(
     trpc.auth.login.mutationOptions({
       onError: (error) => {
         toast.error(error.message);
       },
-      onSuccess: () => {
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.auth.session.queryFilter());
         router.push("/");
       },
     }),

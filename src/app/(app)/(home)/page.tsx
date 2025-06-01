@@ -7,6 +7,9 @@ export default function Home() {
   const trpc = useTRPC();
   const { data } = useQuery(trpc.auth.session.queryOptions());
 
-  console.log(data);
-  return <div className="flex flex-col gap-y-4 p-6">Home page</div>;
+  return (
+    <div className="flex flex-col gap-y-4 p-6">
+      {JSON.stringify(data?.user)}
+    </div>
+  );
 }
