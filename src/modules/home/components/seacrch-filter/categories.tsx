@@ -7,12 +7,15 @@ import { ListFilterIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { CategoriesSidebar } from "./categories-sidebar";
 import { CategoryDropdown } from "./category-dropdown";
+import { useParams } from "next/navigation";
 
 interface Props {
   data: CategoriesGetManyOutput;
 }
 
 export const Categories: React.FC<Props> = ({ data = [] }) => {
+  const params = useParams();
+
   const containerRef = useRef<HTMLDivElement>(null);
   const measureRef = useRef<HTMLDivElement>(null);
   const viewAllRef = useRef<HTMLDivElement>(null);
@@ -21,7 +24,8 @@ export const Categories: React.FC<Props> = ({ data = [] }) => {
   const [isAnyHovered, setIsAnyHovered] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const activeCategory = "all-products";
+  const categoryParam = params.category as string;
+  const activeCategory = categoryParam || "all-products";
   const activeIdx = data.findIndex(
     (category) => category.slug === activeCategory,
   );

@@ -1,8 +1,11 @@
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import { Footer } from "./footer";
-import { Navbar } from "./navbar";
-import { SearchFilter, SearchFilterLoading } from "./seacrch-filter";
 
+import { Footer } from "@/modules/home/components/footer";
+import { Navbar } from "@/modules/home/components/navbar";
+import {
+  SearchFilter,
+  SearchFilterLoading,
+} from "@/modules/home/components/seacrch-filter";
 import { getQueryClient, trpc } from "@/trpc/server";
 import { Suspense } from "react";
 
