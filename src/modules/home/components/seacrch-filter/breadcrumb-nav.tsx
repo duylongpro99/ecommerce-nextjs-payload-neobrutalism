@@ -1,4 +1,13 @@
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { CATEGORY_ALL } from "../../constant";
+import Link from "next/link";
 
 interface Props {
   activeCategory: string;
@@ -12,6 +21,38 @@ export const BreadcrumbNav: React.FC<Props> = ({
   activeCategory,
 }) => {
   if (!activeName || activeCategory === CATEGORY_ALL) return null;
-  console.log(activeSubName);
-  return <div></div>;
+  return (
+    <Breadcrumb>
+      <BreadcrumbList>
+        {activeSubName ? (
+          <>
+            <BreadcrumbItem>
+              <BreadcrumbLink
+                asChild
+                className="text-xl font-medium underline text-primary"
+              >
+                <Link href={`/${activeCategory}`}>{activeName}</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator className="text-primary font-medium text-lg">
+              /
+            </BreadcrumbSeparator>
+            <BreadcrumbItem>
+              <BreadcrumbPage className="text-xl font-medium">
+                {activeSubName}
+              </BreadcrumbPage>
+            </BreadcrumbItem>
+          </>
+        ) : (
+          <>
+            <BreadcrumbItem>
+              <BreadcrumbPage className="text-xl font-medium">
+                {activeSubName}
+              </BreadcrumbPage>
+            </BreadcrumbItem>
+          </>
+        )}
+      </BreadcrumbList>
+    </Breadcrumb>
+  );
 };
