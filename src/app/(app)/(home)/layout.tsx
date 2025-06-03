@@ -15,7 +15,7 @@ interface Props {
 
 const Layout: React.FC<Props> = async ({ children }) => {
   const clientQuery = getQueryClient();
-  void clientQuery.prefetchQuery(trpc.categories.getMany.queryOptions());
+  void clientQuery.prefetchQuery(trpc.categories.getMany.queryFilter());
 
   return (
     <div className="flex flex-col min-h-screen">

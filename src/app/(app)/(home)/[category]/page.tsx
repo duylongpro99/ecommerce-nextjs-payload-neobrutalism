@@ -10,14 +10,19 @@ interface Props {
   }>;
 }
 
-const Page: React.FC<Props> = async ({}) => {
-  // const { category } = await params;
+const Page: React.FC<Props> = async ({ params }) => {
+  const { category } = await params;
   const queryClient = getQueryClient();
-  void queryClient.prefetchQuery(trpc.products.getMany.queryFilter());
+  void queryClient.prefetchQuery(
+    trpc.products.getMany.queryFilter({
+      category,
+    }),
+  );
+
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <Suspense fallback={<ProductListSkeleton />}>
-        <ProductList />
+        <ProductList category={category} />
       </Suspense>
     </HydrationBoundary>
   );
