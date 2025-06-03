@@ -47,7 +47,7 @@ export const BreadcrumbNav: React.FC<Props> = ({
           <>
             <BreadcrumbItem>
               <BreadcrumbPage className="text-xl font-medium">
-                {activeSubName}
+                {activeName}
               </BreadcrumbPage>
             </BreadcrumbItem>
           </>

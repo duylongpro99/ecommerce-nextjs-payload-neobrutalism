@@ -15,8 +15,8 @@ interface Props {
 
 export const SearchInput: React.FC<Props> = ({ disabled }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const tRPC = useTRPC();
-  const session = useQuery(tRPC.auth.session.queryOptions());
+  const trpc = useTRPC();
+  const session = useQuery(trpc.auth.session.queryOptions());
 
   return (
     <div className="flex items-center gap-2 w-full">

@@ -3,26 +3,35 @@ import { baseProcedure, createTRPCRouter } from "@/trpc/init";
 
 export const categoriesRouter = createTRPCRouter({
   getMany: baseProcedure.query(async ({ ctx }) => {
-    const data = await ctx.db.find({
-      collection: "categories",
-      depth: 1, // Subcategories
-      where: {
-        parent: {
-          exists: false,
+    try {
+      const data = await ctx.db.find({
+        collection: "categories",
+        depth: 1, // Subcategories
+        where: {
+          parent: {
+            exists: false,
+          },
         },
-      },
-      sort: "name",
-    });
+        sort: "name",
+      });
 
-    const formattedData = data.docs.map((category) => ({
-      ...category,
-      subcategories: (category.subcategories?.docs || []).map(
-        (subcategory) => ({
-          ...(subcategory as Category),
-        }),
-      ),
-    }));
+      if (!data?.docs) {
+        return [];
+      }
 
-    return formattedData;
+      const formattedData = data.docs.map((category) => ({
+        ...category,
+        subcategories: (category.subcategories?.docs || []).map(
+          (subcategory) => ({
+            ...(subcategory as Category),
+          }),
+        ),
+      }));
+
+      return formattedData;
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+      return [];
+    }
   }),
 });
