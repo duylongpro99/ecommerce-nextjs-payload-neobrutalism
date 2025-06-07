@@ -1,9 +1,9 @@
-import z from "zod";
+import { DEFAULT_PAGE_SIZE } from "@/common/constants";
+import { Category, Media, Tenant } from "@/payload-types";
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
 import { Sort, Where } from "payload";
-import { Category, Media } from "@/payload-types";
+import z from "zod";
 import { sortValues } from "../search-params";
-import { DEFAULT_PAGE_SIZE } from "@/common/constants";
 
 export const productsRouter = createTRPCRouter({
   getMany: baseProcedure
@@ -16,6 +16,7 @@ export const productsRouter = createTRPCRouter({
         maxPrice: z.string().nullable().optional(),
         tags: z.array(z.string()).nullable().optional(),
         sort: z.enum(sortValues).nullable().optional(),
+        tenantSlug: z.string().nullable().optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -51,6 +52,12 @@ export const productsRouter = createTRPCRouter({
         where.price = {
           ...(where.price ?? {}),
           less_than_equal: input.maxPrice,
+        };
+      }
+
+      if (input.tenantSlug) {
+        where["tenant.slug"] = {
+          equals: input.tenantSlug,
         };
       }
 
@@ -99,7 +106,7 @@ export const productsRouter = createTRPCRouter({
 
       const data = await ctx.db.find({
         collection: "products",
-        depth: 1, //Categogry & image - depth 0 just return the id of relation
+        depth: 2, //Categogry & image - depth 0 just return the id of relation
         where,
         sort,
         page: input.cursor,
@@ -112,6 +119,7 @@ export const productsRouter = createTRPCRouter({
         docs: data.docs.map((doc) => ({
           ...doc,
           image: doc.image as Media | null,
+          tenant: doc.tenant as Tenant & { image?: Media },
         })),
       };
     }),

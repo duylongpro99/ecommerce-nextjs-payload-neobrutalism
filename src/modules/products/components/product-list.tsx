@@ -2,17 +2,25 @@
 
 interface Props {
   category?: string;
+  tenantSlug?: string;
+  narrowView?: boolean;
 }
 
 import { DEFAULT_PAGE_SIZE } from "@/common/constants";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { Media } from "@/payload-types";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { InboxIcon } from "lucide-react";
 import { useProductFilters } from "../hooks/use-product-filters";
 import { ProductCard } from "./product-card";
 
-export const ProductList: React.FC<Props> = ({ category }) => {
+export const ProductList: React.FC<Props> = ({
+  category,
+  tenantSlug,
+  narrowView,
+}) => {
   const [filters] = useProductFilters();
 
   const trpc = useTRPC();
@@ -21,6 +29,7 @@ export const ProductList: React.FC<Props> = ({ category }) => {
       trpc.products.getMany.infiniteQueryOptions(
         {
           category,
+          tenantSlug,
           limit: DEFAULT_PAGE_SIZE,
           ...filters,
         },
@@ -43,7 +52,12 @@ export const ProductList: React.FC<Props> = ({ category }) => {
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+      <div
+        className={cn(
+          "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4",
+          narrowView && "lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3",
+        )}
+      >
         {data?.pages
           ?.flatMap((page) => page.docs || [])
           .map((product) => {
@@ -54,8 +68,8 @@ export const ProductList: React.FC<Props> = ({ category }) => {
                 name={product.name}
                 price={product.price}
                 imageUrl={product.image?.url}
-                authorUsername={"user"}
-                authorImageUrl={undefined}
+                tenantSlug={product.tenant?.name}
+                tenantImageUrl={(product.tenant?.image as Media)?.url || ""}
                 reviewRating={3}
                 reviewCount={5}
               />
