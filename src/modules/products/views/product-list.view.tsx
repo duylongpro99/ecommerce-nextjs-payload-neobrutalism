@@ -27,7 +27,7 @@ export const ProductListView: React.FC<Props> = ({
           <ProductFilters />
         </div>
         <div className="lg:col-span-4 xl:col-span-6">
-          <Suspense fallback={<ProductListSkeleton />}>
+          <Suspense fallback={<ProductListSkeleton narrowView={narrowView} />}>
             <ProductList
               category={category}
               tenantSlug={tenantSlug}
