@@ -21,10 +21,10 @@ export const SubCategoryDropdown: React.FC<Props> = ({
 
   return (
     <div
-      className="fixed z-100"
+      className="absolute z-100"
       style={{
-        top: position.top,
-        left: position.left,
+        top: "100%",
+        left: 0,
       }}
     >
       <div className="h-3 w-60"></div>

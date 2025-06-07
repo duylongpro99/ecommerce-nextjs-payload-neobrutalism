@@ -1,3 +1,4 @@
+import { DEFAULT_PAGE_SIZE } from "@/common/constants";
 import { loadProductFilters } from "@/modules/products/search-params";
 import { ProductListView } from "@/modules/products/views/product-list.view";
 import { getQueryClient, trpc } from "@/trpc/server";
@@ -16,10 +17,11 @@ const Page: React.FC<Props> = async ({ params, searchParams }) => {
   const filters = await loadProductFilters(searchParams);
 
   const queryClient = getQueryClient();
-  void queryClient.prefetchQuery(
-    trpc.products.getMany.queryFilter({
-      category,
+  void queryClient.prefetchInfiniteQuery(
+    trpc.products.getMany.infiniteQueryOptions({
       ...filters,
+      category,
+      limit: DEFAULT_PAGE_SIZE,
     }),
   );
 
