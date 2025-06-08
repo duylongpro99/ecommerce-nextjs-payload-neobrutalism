@@ -123,4 +123,23 @@ export const productsRouter = createTRPCRouter({
         })),
       };
     }),
+  getOne: baseProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const data = await ctx.db.findByID({
+        collection: "products",
+        id: input.id,
+        depth: 2,
+      });
+
+      return {
+        ...data,
+        image: data.image as Media | null,
+        tenant: data.tenant as (Tenant & { image: Media | null }) | null,
+      };
+    }),
 });
