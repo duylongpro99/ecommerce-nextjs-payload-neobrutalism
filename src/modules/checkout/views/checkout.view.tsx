@@ -17,7 +17,7 @@ interface Props {
 }
 
 export const CheckoutView: React.FC<Props> = ({ tenantSlug }) => {
-  const { productIds, clearAllCarts, removeProduct, clearCart } = useCart({
+  const { productIds, removeProduct, clearCart } = useCart({
     tenantSlug,
   });
   const trpc = useTRPC();
