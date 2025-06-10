@@ -1,32 +1,80 @@
 "use client";
 
+import { generateTenantUrl } from "@/lib/utils";
 import { useTRPC } from "@/trpc/client";
-import { useQuery } from "@tanstack/react-query";
-import { useCart } from "../hooks/use-cart";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { InboxIcon, LoaderIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
-import { generateTenantUrl } from "@/lib/utils";
 import { CheckoutItem } from "../components/checkout-item";
 import { CheckoutSidebar } from "../components/checkout-sidebar";
-import { InboxIcon, LoaderIcon } from "lucide-react";
+import { useCart } from "../hooks/use-cart";
+import { useCheckoutStates } from "../hooks/use-checkout-states";
 
 interface Props {
   tenantSlug: string;
 }
 
 export const CheckoutView: React.FC<Props> = ({ tenantSlug }) => {
-  const { productIds, clearAllCarts, removeProduct } = useCart({ tenantSlug });
+  const { productIds, clearAllCarts, removeProduct, clearCart } = useCart({
+    tenantSlug,
+  });
   const trpc = useTRPC();
   const { data, error, isLoading } = useQuery(
     trpc.checkout.getProducts.queryOptions({ ids: productIds }),
   );
+  const router = useRouter();
 
   useEffect(() => {
     if (error?.data?.code === "NOT_FOUND") {
-      clearAllCarts();
+      clearCart();
       toast.warning("Invalid products found, clear all carts.");
     }
-  }, [error, clearAllCarts]);
+  }, [error, clearCart]);
+
+  /**Checkout */
+  const [checkoutStates, setCheckoutStates] = useCheckoutStates();
+  useEffect(() => {
+    if (checkoutStates?.success) {
+      setCheckoutStates({
+        success: false,
+        cancel: false,
+      });
+      clearCart();
+      toast.success("Checkout successful!");
+      router.push("/products");
+    }
+    if (checkoutStates?.cancel) {
+      toast.error("Checkout cancelled.");
+    }
+  }, [checkoutStates, clearCart, router, setCheckoutStates]);
+
+  const purchase = useMutation(
+    trpc.checkout.purchase.mutationOptions({
+      onMutate: () => {
+        setCheckoutStates({
+          success: false,
+          cancel: false,
+        });
+      },
+      onSuccess: (data) => {
+        window.location.href = data.url;
+      },
+      onError: (error) => {
+        if (error.data?.code === "UNAUTHORIZED") {
+          router.push("/sign-in");
+        }
+        toast.error(error.message);
+      },
+    }),
+  );
+  const onCheckout = () => {
+    purchase.mutate({
+      productIds,
+      tenantSlug,
+    });
+  };
 
   if (isLoading) {
     return (
@@ -76,9 +124,9 @@ export const CheckoutView: React.FC<Props> = ({ tenantSlug }) => {
         <div className="lg:col-span-3">
           <CheckoutSidebar
             totalPrice={data?.totalPrice ?? 0}
-            onCheckout={() => {}}
-            isCancel={false}
-            isPending={false}
+            onCheckout={onCheckout}
+            isCancel={checkoutStates.cancel}
+            disabled={purchase.isPending}
           />
         </div>
       </div>

@@ -6,14 +6,14 @@ interface Props {
   totalPrice: number;
   onCheckout: () => void;
   isCancel?: boolean;
-  isPending?: boolean;
+  disabled?: boolean;
 }
 
 export const CheckoutSidebar: React.FC<Props> = ({
   totalPrice,
   onCheckout,
   isCancel = false,
-  isPending = false,
+  disabled = false,
 }) => {
   return (
     <div className="border rounded-md overflow-hidden bg-white flex flex-col">
@@ -24,7 +24,7 @@ export const CheckoutSidebar: React.FC<Props> = ({
       <div className="p-4 flex items-center justify-center">
         <Button
           variant={"elevated"}
-          disabled={isPending}
+          disabled={disabled}
           onClick={onCheckout}
           size={"lg"}
           className="text-base w-full text-white bg-primary hover:bg-pink-400 hover:text-primary"
