@@ -17,13 +17,13 @@ const Page: React.FC<Props> = async ({ params, searchParams }) => {
   const filters = await loadProductFilters(searchParams);
 
   const queryClient = getQueryClient();
-  void queryClient.prefetchInfiniteQuery(
+  void (await queryClient.prefetchInfiniteQuery(
     trpc.products.getMany.infiniteQueryOptions({
       category: subCategory,
       limit: DEFAULT_PAGE_SIZE,
       ...filters,
     }),
-  );
+  ));
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
