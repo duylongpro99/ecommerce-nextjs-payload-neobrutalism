@@ -4,6 +4,7 @@ import { baseProcedure, createTRPCRouter } from "@/trpc/init";
 import { Sort, Where } from "payload";
 import z from "zod";
 import { sortValues } from "../search-params";
+import { headers } from "next/headers";
 
 export const productsRouter = createTRPCRouter({
   getMany: baseProcedure
@@ -130,14 +131,37 @@ export const productsRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
+      const h = await headers();
+      const session = await ctx.db.auth({ headers: h });
+
       const data = await ctx.db.findByID({
         collection: "products",
         id: input.id,
         depth: 2,
       });
 
+      let isPurchased = false;
+      if (session.user) {
+        const ordersData = await ctx.db.find({
+          collection: "orders",
+          where: {
+            user: {
+              equals: session.user.id,
+            },
+            product: {
+              equals: input.id,
+            },
+          },
+          pagination: false,
+          limit: 1,
+        });
+
+        isPurchased = ordersData.totalDocs > 0;
+      }
+
       return {
         ...data,
+        isPurchased,
         image: data.image as Media | null,
         tenant: data.tenant as (Tenant & { image: Media | null }) | null,
       };

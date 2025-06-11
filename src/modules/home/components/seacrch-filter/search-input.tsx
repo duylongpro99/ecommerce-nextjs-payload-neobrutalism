@@ -40,7 +40,7 @@ export const SearchInput: React.FC<Props> = ({ disabled }) => {
       {session?.data?.user ? (
         <>
           <Button variant="elevated" asChild>
-            <Link href="/library">
+            <Link prefetch href="/library">
               <BookmarkCheckIcon />
               Library
             </Link>

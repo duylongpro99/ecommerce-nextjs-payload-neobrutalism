@@ -2,36 +2,19 @@
 
 import { DEFAULT_PAGE_SIZE } from "@/common/constants";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { Media } from "@/payload-types";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { InboxIcon } from "lucide-react";
-import { useProductFilters } from "../hooks/use-product-filters";
 import { ProductCard } from "./product-card";
 
-interface Props {
-  category?: string;
-  tenantSlug?: string;
-  narrowView?: boolean;
-}
-
-export const ProductList: React.FC<Props> = ({
-  category,
-  tenantSlug,
-  narrowView,
-}) => {
-  const [filters] = useProductFilters();
-
+export const ProductList: React.FC = () => {
   const trpc = useTRPC();
   const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
     useSuspenseInfiniteQuery(
-      trpc.products.getMany.infiniteQueryOptions(
+      trpc.library.getMany.infiniteQueryOptions(
         {
-          category,
-          tenantSlug,
           limit: DEFAULT_PAGE_SIZE,
-          ...filters,
         },
         {
           getNextPageParam: (lastPage) => {
@@ -52,12 +35,7 @@ export const ProductList: React.FC<Props> = ({
 
   return (
     <>
-      <div
-        className={cn(
-          "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4",
-          narrowView && "lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3",
-        )}
-      >
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
         {data?.pages
           ?.flatMap((page) => page.docs || [])
           .map((product) => {
@@ -66,7 +44,6 @@ export const ProductList: React.FC<Props> = ({
                 key={product.id}
                 id={product.id}
                 name={product.name}
-                price={product.price}
                 imageUrl={product.image?.url}
                 tenantSlug={product.tenant?.name}
                 tenantImageUrl={(product.tenant?.image as Media)?.url || ""}

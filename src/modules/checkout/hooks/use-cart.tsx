@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { useShallow } from "zustand/react/shallow";
 import { useCartStore } from "../store/use-cart-store";
 
 export const useCart = ({ tenantSlug }: { tenantSlug: string }) => {
@@ -7,32 +8,49 @@ export const useCart = ({ tenantSlug }: { tenantSlug: string }) => {
   const clearCart = useCartStore((state) => state.clearCart);
   const clearAllCarts = useCartStore((state) => state.clearAllCarts);
   const productIds = useCartStore(
-    (state) => state.cart[tenantSlug]?.productIds || [],
+    useShallow((state) => state.cart[tenantSlug]?.productIds || []),
   );
 
   const toggleProduct = useCallback(
     (productId: string) => {
       if (productIds.includes(productId)) {
-        removeProduct(tenantSlug, productId);
+        void removeProduct(tenantSlug, productId);
       } else {
-        addProduct(tenantSlug, productId);
+        void addProduct(tenantSlug, productId);
       }
     },
     [removeProduct, addProduct, productIds, tenantSlug],
   );
 
-  const isProductInCart = (productId: string) => {
-    return productIds.includes(productId);
-  };
+  const isProductInCart = useCallback(
+    (productId: string) => {
+      return productIds.includes(productId);
+    },
+    [productIds],
+  );
 
-  const clearTenantCart = () => {
-    clearCart(tenantSlug);
-  };
+  const clearTenantCart = useCallback(() => {
+    void clearCart(tenantSlug);
+  }, [tenantSlug, clearCart]);
+
+  const handleAddProduct = useCallback(
+    (productId: string) => {
+      void addProduct(tenantSlug, productId);
+    },
+    [tenantSlug, addProduct],
+  );
+
+  const handleRemoveProduct = useCallback(
+    (productId: string) => {
+      void removeProduct(tenantSlug, productId);
+    },
+    [tenantSlug, removeProduct],
+  );
 
   return {
     productIds,
-    addProduct: (productId: string) => addProduct(tenantSlug, productId),
-    removeProduct: (productId: string) => removeProduct(tenantSlug, productId),
+    addProduct: handleAddProduct,
+    removeProduct: handleRemoveProduct,
     toggleProduct,
     clearCart: clearTenantCart,
     clearAllCarts,
