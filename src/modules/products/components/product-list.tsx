@@ -70,8 +70,8 @@ export const ProductList: React.FC<Props> = ({
                 imageUrl={product.image?.url}
                 tenantSlug={product.tenant?.name}
                 tenantImageUrl={(product.tenant?.image as Media)?.url || ""}
-                reviewRating={3}
-                reviewCount={5}
+                reviewRating={product.reviewRating}
+                reviewCount={product.reviewCount}
               />
             );
           })}
