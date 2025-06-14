@@ -11,11 +11,7 @@ interface Props {
   };
 }
 
-export const SubCategoryDropdown: React.FC<Props> = ({
-  category,
-  isOpen,
-  position,
-}) => {
+export const SubCategoryDropdown: React.FC<Props> = ({ category, isOpen }) => {
   if (!isOpen || !category?.subcategories?.length) return <></>;
   const backgroundColor = category.color || "#f5f5f5";
 

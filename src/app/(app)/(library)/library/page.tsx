@@ -3,6 +3,8 @@ import { LibraryView } from "@/modules/library/views/library.view";
 import { getQueryClient, trpc } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
+export const dynamic = "force-dynamic";
+
 const Page: React.FC = async () => {
   const queryClient = getQueryClient();
   void (await queryClient.prefetchInfiniteQuery(
