@@ -10,19 +10,18 @@ interface Props {
 
 const Page: React.FC<Props> = async ({ params }) => {
   const { productId } = await params;
-
   const queryClient = getQueryClient();
   void (await queryClient.prefetchQuery(
-    trpc.library.getOne.queryOptions({
+    trpc.library.getOne.queryFilter({
       productId,
     }),
   ));
 
-  // void (await queryClient.prefetchQuery(
-  //   trpc.reviews.getOne.queryOptions({
-  //     productId,
-  //   }),
-  // ));
+  void (await queryClient.prefetchQuery(
+    trpc.reviews.getOne.queryFilter({
+      productId,
+    }),
+  ));
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
