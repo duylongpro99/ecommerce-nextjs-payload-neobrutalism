@@ -5,6 +5,7 @@ import { Sort, Where } from "payload";
 import z from "zod";
 import { sortValues } from "../search-params";
 import { headers } from "next/headers";
+import { TRPCError } from "@trpc/server";
 
 export const productsRouter = createTRPCRouter({
   getMany: baseProcedure
@@ -21,7 +22,11 @@ export const productsRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const where: Where = {};
+      const where: Where = {
+        isArchived: {
+          not_equals: true,
+        },
+      };
       let sort: Sort = "-createdAt";
 
       if (input.sort === "interested") {
@@ -59,6 +64,10 @@ export const productsRouter = createTRPCRouter({
       if (input.tenantSlug) {
         where["tenant.slug"] = {
           equals: input.tenantSlug,
+        };
+      } else {
+        where["isPrivated"] = {
+          not_equals: true,
         };
       }
 
@@ -171,6 +180,13 @@ export const productsRouter = createTRPCRouter({
           content: false,
         },
       });
+
+      if (data.isArchived) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Product not found",
+        });
+      }
 
       let isPurchased = false;
       if (session.user) {

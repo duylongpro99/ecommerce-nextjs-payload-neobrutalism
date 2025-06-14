@@ -159,3 +159,24 @@ export const ReviewForm: React.FC<Props> = ({ productId, intialData }) => {
     </Form>
   );
 };
+
+export const ReviewFormSekeleton: React.FC = () => {
+  return (
+    <div className="flex flex-col gap-y-4">
+      <p className="font-medium">Liked it? Give it a rating</p>
+
+      <StarPicker disable />
+
+      <Textarea placeholder="Leave your review..." disabled />
+
+      <Button
+        variant="elevated"
+        type="button"
+        size="lg"
+        className="bg-black text-white hover:bg-pink-400 hover:text-primary w-fit"
+      >
+        Post review
+      </Button>
+    </div>
+  );
+};

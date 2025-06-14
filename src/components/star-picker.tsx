@@ -6,7 +6,7 @@ interface Props {
   value?: number;
   className?: string;
   disable?: boolean;
-  onChange: (value: number) => void;
+  onChange?: (value: number) => void;
 }
 
 export const StarPicker: React.FC<Props> = ({

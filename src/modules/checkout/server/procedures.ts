@@ -1,4 +1,5 @@
 import { stripe } from "@/lib/stripe";
+import { PLATFORM_PERCENT } from "@/modules/home/constant";
 import { Media, Tenant } from "@/payload-types";
 import {
   baseProcedure,
@@ -9,8 +10,6 @@ import { TRPCError } from "@trpc/server";
 import Stripe from "stripe";
 import z from "zod";
 import { CheckoutMetadata, ProductMetadata } from "../types";
-import { it } from "node:test";
-import { PLATFORM_PERCENT } from "@/modules/home/constant";
 
 export const checkoutRouter = createTRPCRouter({
   verify: protectedBaseProcedure.mutation(async ({ ctx }) => {
@@ -70,6 +69,11 @@ export const checkoutRouter = createTRPCRouter({
             {
               "tenant.slug": {
                 equals: input.tenantSlug,
+              },
+            },
+            {
+              isArchived: {
+                not_equals: true,
               },
             },
           ],
@@ -173,9 +177,18 @@ export const checkoutRouter = createTRPCRouter({
         collection: "products",
         depth: 2, //Categogry & image - depth 0 just return the id of relation
         where: {
-          id: {
-            in: input.ids,
-          },
+          and: [
+            {
+              id: {
+                in: input.ids,
+              },
+            },
+            {
+              isArchived: {
+                not_equals: true,
+              },
+            },
+          ],
         },
       });
 
