@@ -9,8 +9,41 @@ import { TRPCError } from "@trpc/server";
 import Stripe from "stripe";
 import z from "zod";
 import { CheckoutMetadata, ProductMetadata } from "../types";
+import { it } from "node:test";
+import { PLATFORM_PERCENT } from "@/modules/home/constant";
 
 export const checkoutRouter = createTRPCRouter({
+  verify: protectedBaseProcedure.mutation(async ({ ctx }) => {
+    const user = await ctx.db.findByID({
+      collection: "users",
+      id: ctx.session.user.id,
+      depth: 0,
+    });
+
+    if (!user) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "User not found",
+      });
+    }
+
+    const tenantId = user.tenants?.[0]?.tenant as string;
+    const tenant = await ctx.db.findByID({
+      collection: "tenants",
+      id: tenantId,
+    });
+
+    if (!tenant) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Tenant not found",
+      });
+    }
+
+    const accountLink = ""; //connect to Stripe
+    return { url: accountLink };
+  }),
+
   purchase: protectedBaseProcedure
     .input(
       z.object({
@@ -88,19 +121,36 @@ export const checkoutRouter = createTRPCRouter({
           },
         }));
 
-      const checkout = await stripe.checkout.sessions.create({
-        customer_email: ctx.session.user.email,
-        success_url: `${process.env.NEXT_PUBLIC_APP_URL}/tenants/${input.tenantSlug}/checkout?success=true`,
-        cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/tenants/${input.tenantSlug}/checkout?cancel=true`,
-        mode: "payment",
-        line_items: lineItems,
-        invoice_creation: {
-          enabled: true,
+      const totalAmount = products.docs.reduce(
+        (acc, item) => acc + item.price * 100,
+        0,
+      );
+
+      const platformFreeAmount = Math.round(
+        totalAmount * (PLATFORM_PERCENT / 100),
+      );
+
+      const checkout = await stripe.checkout.sessions.create(
+        {
+          customer_email: ctx.session.user.email,
+          success_url: `${process.env.NEXT_PUBLIC_APP_URL}/tenants/${input.tenantSlug}/checkout?success=true`,
+          cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/tenants/${input.tenantSlug}/checkout?cancel=true`,
+          mode: "payment",
+          line_items: lineItems,
+          invoice_creation: {
+            enabled: true,
+          },
+          metadata: {
+            userId: ctx.session.user.id,
+          } as CheckoutMetadata,
+          // payment_intent_data: {
+          //   application_fee_amount: platformFreeAmount,
+          // },
         },
-        metadata: {
-          userId: ctx.session.user.id,
-        } as CheckoutMetadata,
-      });
+        // {
+        //   stripeAccount: tenant.paymentAccountId,
+        // },
+      );
 
       if (!checkout.url) {
         throw new TRPCError({
