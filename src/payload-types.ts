@@ -169,6 +169,9 @@ export interface Tenant {
    */
   slug: string;
   image?: (string | null) | Media;
+  /**
+   * Stripe AccountId associated with your shop
+   */
   paymentAccountId: string;
   /**
    * Please submi Payment details before create products
@@ -231,6 +234,10 @@ export interface Product {
   tags?: (string | Tag)[] | null;
   image?: (string | null) | Media;
   refundPolicy?: ('30-days' | '14-days' | '7-days' | '3-days' | '1-day' | 'no-refund') | null;
+  /**
+   * Protected content only visible to customers after purchase. Add product documentation, download files, getting started guides, and bonus materials. Supports makrdown formatting
+   */
+  content?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -253,6 +260,9 @@ export interface Order {
   id: string;
   name: string;
   user: string | User;
+  /**
+   * Checkout session associated with the order
+   */
   paymentCheckoutSesstionId: string;
   product: string | Product;
   updatedAt: string;
@@ -419,6 +429,7 @@ export interface ProductsSelect<T extends boolean = true> {
   tags?: T;
   image?: T;
   refundPolicy?: T;
+  content?: T;
   updatedAt?: T;
   createdAt?: T;
 }

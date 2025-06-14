@@ -23,6 +23,9 @@ export const checkoutRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const products = await ctx.db.find({
         collection: "products",
+        select: {
+          content: false,
+        },
         depth: 2, //Categogry & image - depth 0 just return the id of relation
         where: {
           and: [
