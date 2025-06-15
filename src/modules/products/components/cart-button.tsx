@@ -23,7 +23,9 @@ export const CartButton: React.FC<Props> = ({
         className="flex-1 font-medium bg-pink-400"
         asChild
       >
-        <Link href={`/library/${productId}`}>View in Library</Link>
+        <Link href={`${process.env.NEXT_PUBLIC_APP_URL}/library/${productId}`}>
+          View in Library
+        </Link>
       </Button>
     );
   }
