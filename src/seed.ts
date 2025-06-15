@@ -152,6 +152,7 @@ const categories: Category[] = [
 const seed = async () => {
   const payload = await getPayload({ config });
 
+  //super admin user
   const tenant = await payload.create({
     collection: "tenants",
     data: {
@@ -175,6 +176,38 @@ const seed = async () => {
       ],
     },
   });
+
+  //tenant user
+  await Promise.all(
+    process.env
+      .SUB_TENANTS!.trim()
+      .split(",")
+      .map(async (slug) => {
+        const subTenant = await payload.create({
+          collection: "tenants",
+          data: {
+            name: slug,
+            slug,
+            paymentAccountId: slug,
+          },
+        });
+
+        await payload.create({
+          collection: "users",
+          data: {
+            email: `${slug}@flexstore.com`,
+            password: process.env.TEANT_USER_PASSWORD,
+            roles: ["user"],
+            username: slug,
+            tenants: [
+              {
+                tenant: subTenant.id,
+              },
+            ],
+          },
+        });
+      }),
+  );
 
   for (const cat of categories) {
     const parentCategory = await payload.create({

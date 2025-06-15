@@ -1,8 +1,6 @@
 "use client";
 
-import z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { registerSchema } from "../schema";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -12,16 +10,19 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import Link from "next/link";
-import { useForm } from "react-hook-form";
-import { cn } from "@/lib/utils";
-import { DM_Sans } from "next/font/google";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 import { useTRPC } from "@/trpc/client";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { DM_Sans } from "next/font/google";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import z from "zod";
+import { AuthMotion } from "../components/auth-motion";
+import { registerSchema } from "../schema";
 
 const dmSans = DM_Sans({ subsets: ["latin"] });
 
@@ -63,7 +64,7 @@ export const SignUpView: React.FC = () => {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-5">
-      <div className="bg-[#f4f4f0] h-screen w-full lg:col-span-3 overflow-y-auto">
+      <div className="bg-[#f4f4f0] h-screen w-full lg:col-span-2 overflow-y-auto">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -148,14 +149,9 @@ export const SignUpView: React.FC = () => {
           </form>
         </Form>
       </div>
-      <div
-        className="h-screen w-full lg:col-span-2 hidden lg:block"
-        style={{
-          backgroundImage: "url('/auth-bg.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      ></div>
+      <div className="h-screen w-full lg:col-span-3 hidden lg:block">
+        <AuthMotion />
+      </div>
     </div>
   );
 };

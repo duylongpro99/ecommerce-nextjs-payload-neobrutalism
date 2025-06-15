@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
+import { AuthMotion } from "../components/auth-motion";
 import { loginSchema } from "../schema";
 
 const dmSans = DM_Sans({ subsets: ["latin"] });
@@ -56,7 +57,8 @@ export const SignInView: React.FC = () => {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-5">
-      <div className="bg-[#f4f4f0] h-screen w-full lg:col-span-3 overflow-y-auto">
+      <div className="bg-[#f4f4f0] h-screen w-full lg:col-span-2 overflow-y-auto">
+        {/* Login Form */}
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -123,14 +125,9 @@ export const SignInView: React.FC = () => {
           </form>
         </Form>
       </div>
-      <div
-        className="h-screen w-full lg:col-span-2 hidden lg:block"
-        style={{
-          backgroundImage: "url('/auth-bg.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      ></div>
+      <div className="h-screen w-full lg:col-span-3 hidden lg:block">
+        <AuthMotion />
+      </div>
     </div>
   );
 };
