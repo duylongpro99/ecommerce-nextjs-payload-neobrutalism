@@ -33,28 +33,34 @@ export const authRouter = createTRPCRouter({
         });
       }
 
-      const tenant = await ctx.db.create({
-        collection: "tenants",
-        data: {
-          name: input.username,
-          slug: input.username,
-          paymentAccountId: "none",
-        },
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message:
+          "Registration is disabled! This site is used only for demo. If you wanna have some experiences with Flexible Store. Just using provided account to login. Contact Cris (me) to get the account.",
       });
 
-      await ctx.db.create({
-        collection: "users",
-        data: {
-          email: input.email,
-          username: input.username,
-          password: input.password,
-          tenants: [
-            {
-              tenant: tenant.id,
-            },
-          ],
-        },
-      });
+      // const tenant = await ctx.db.create({
+      //   collection: "tenants",
+      //   data: {
+      //     name: input.username,
+      //     slug: input.username,
+      //     paymentAccountId: "none",
+      //   },
+      // });
+
+      // await ctx.db.create({
+      //   collection: "users",
+      //   data: {
+      //     email: input.email,
+      //     username: input.username,
+      //     password: input.password,
+      //     tenants: [
+      //       {
+      //         tenant: tenant.id,
+      //       },
+      //     ],
+      //   },
+      // });
     }),
 
   login: baseProcedure.input(loginSchema).mutation(async ({ input, ctx }) => {
