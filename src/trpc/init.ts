@@ -40,7 +40,6 @@ export const protectedBaseProcedure = baseProcedure.use(
   async ({ ctx, next }) => {
     const h = await headers();
     const session = await ctx.db.auth({ headers: h });
-    console.log(":session", session);
 
     if (!session.user) {
       throw new TRPCError({
