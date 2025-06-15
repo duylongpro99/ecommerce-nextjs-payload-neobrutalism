@@ -1,22 +1,34 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { BookmarkCheckIcon, ListFilterIcon, SearchIcon } from "lucide-react";
-import { useState } from "react";
-import { CategoriesSidebar } from "./categories-sidebar";
 import { useTRPC } from "@/trpc/client";
 import { useQuery } from "@tanstack/react-query";
+import { BookmarkCheckIcon, ListFilterIcon, SearchIcon } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { CategoriesSidebar } from "./categories-sidebar";
 
 interface Props {
   disabled?: boolean;
+  value?: string;
+  onSearch?: (searchValue: string) => void;
 }
 
-export const SearchInput: React.FC<Props> = ({ disabled }) => {
+export const SearchInput: React.FC<Props> = ({ disabled, value, onSearch }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState<string | undefined>(value);
+
   const trpc = useTRPC();
   const session = useQuery(trpc.auth.session.queryOptions());
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      onSearch?.(searchValue ?? "");
+    }, 500);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [searchValue, onSearch]);
 
   return (
     <div className="flex items-center gap-2 w-full">
@@ -27,6 +39,10 @@ export const SearchInput: React.FC<Props> = ({ disabled }) => {
           className="pl-8"
           placeholder="Search products"
           disabled={disabled}
+          value={searchValue}
+          onChange={(e) => {
+            setSearchValue(e.target.value);
+          }}
         />
       </div>
 

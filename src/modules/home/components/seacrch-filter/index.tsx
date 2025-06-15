@@ -1,5 +1,6 @@
 "use client";
 
+import { useProductFilters } from "@/modules/products/hooks/use-product-filters";
 import { useTRPC } from "@/trpc/client";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
@@ -11,6 +12,7 @@ import { SearchInput } from "./search-input";
 export const SearchFilter: React.FC = (): React.ReactNode => {
   const tprc = useTRPC();
   const params = useParams();
+  const [searchFilters, setSearchFilters] = useProductFilters();
 
   const { data = [] } = useQuery(tprc.categories.getMany.queryOptions());
 
@@ -35,7 +37,15 @@ export const SearchFilter: React.FC = (): React.ReactNode => {
         backgroundColor: activeColor,
       }}
     >
-      <SearchInput />
+      <SearchInput
+        value={searchFilters.search}
+        onSearch={(searchValue) => {
+          setSearchFilters((prev) => ({
+            ...prev,
+            search: searchValue,
+          }));
+        }}
+      />
       <div className="hidden lg:block">
         <Categories data={data} />
       </div>
