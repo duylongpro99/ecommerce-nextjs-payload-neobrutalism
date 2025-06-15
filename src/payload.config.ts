@@ -18,6 +18,7 @@ import { Tenants } from "./collections/Tenants";
 import { Users } from "./collections/Users";
 import { isSuperAdmin } from "./lib/access";
 import { Config } from "./payload-types";
+import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -76,5 +77,12 @@ export default buildConfig({
       userHasAccessToAllTenants: (user) => isSuperAdmin(user),
     }),
     // storage-adapter-placeholder
+    vercelBlobStorage({
+      enabled: true,
+      collections: {
+        media: true,
+      },
+      token: process.env.VERCEL_BLOB_STORAGE_TOKEN || "",
+    }),
   ],
 });
