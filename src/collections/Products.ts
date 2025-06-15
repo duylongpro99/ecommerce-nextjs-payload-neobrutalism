@@ -8,8 +8,9 @@ export const Products: CollectionConfig = {
     read: () => true,
     create: ({ req }) => {
       if (isSuperAdmin(req.user)) return true;
-      const tenant = req.user?.tenants?.[0]?.tenant as Tenant;
-      return Boolean(tenant?.paymentDetailsSubmitted);
+      // const tenant = req.user?.tenants?.[0]?.tenant as Tenant;
+      // return Boolean(tenant?.paymentDetailsSubmitted);
+      return true;
     },
     delete: ({ req }) => isSuperAdmin(req.user),
   },
