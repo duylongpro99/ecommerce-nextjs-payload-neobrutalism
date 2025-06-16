@@ -21,7 +21,7 @@ export const CheckoutButton: React.FC<Props> = ({
 
   return (
     <Button variant={"elevated"} className={cn("bg-white", className)} asChild>
-      <Link href={`${generateTenantUrl(tenantSlug)}/checkout`}>
+      <Link prefetch href={`${generateTenantUrl(tenantSlug)}/checkout`}>
         <ShoppingCartIcon /> {totalItems > 0 ? totalItems : ""}
       </Link>
     </Button>

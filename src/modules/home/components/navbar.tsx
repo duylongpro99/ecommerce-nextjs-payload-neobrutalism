@@ -32,7 +32,7 @@ const NavbarItem = ({ children, isActive, href }: NavbarItemProps) => {
         isActive && "bg-black text-white hover:bg-black hover:text-white",
       )}
     >
-      <Link href={href}>{children}</Link>
+      <Link prefetch href={href}>{children}</Link>
     </Button>
   );
 };
@@ -74,7 +74,7 @@ export const Navbar = () => {
 
   return (
     <nav className="h-20 flex border-b justify-between font-medium bg-white">
-      <Link href="/" className="pl-6 flex items-center">
+      <Link prefetch href="/" className="pl-6 flex items-center">
         <span className={cn("text-5xl font-semibold", poppins.className)}>
           Flexible Store
         </span>
@@ -84,7 +84,7 @@ export const Navbar = () => {
 
       <div className="items-center gap-4 hidden lg:flex">
         {navbarItems.map((item) => (
-          <NavbarItem
+          <NavbarItem 
             key={item.href}
             href={item.href}
             isActive={pathName === item.href}

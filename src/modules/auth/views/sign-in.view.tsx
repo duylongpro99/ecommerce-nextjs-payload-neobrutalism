@@ -65,7 +65,7 @@ export const SignInView: React.FC = () => {
             className="flex flex-col gap-8 p-4 lg:p-16"
           >
             <div className="flex items-center justify-between mb-8">
-              <Link href="/">
+              <Link prefetch href="/">
                 <span
                   className={cn("text-2xl font-semibold", dmSans.className)}
                 >
