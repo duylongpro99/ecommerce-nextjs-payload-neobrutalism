@@ -48,14 +48,14 @@ Then run the following command to forward Stripe events to your local server:
 
 ## Features
 
+### Authentication
+![Login Page](/demo/login.png)
+
 ### Product Browsing
 ![Product Listing](/demo/home.png)
 
 ### Product Details
 ![Product Detail](/demo/product-detail.png)
-
-### Authentication
-![Login Page](/demo/login.png)
 
 ### Checkout
 ![Checkout](/demo/checkout.png)
