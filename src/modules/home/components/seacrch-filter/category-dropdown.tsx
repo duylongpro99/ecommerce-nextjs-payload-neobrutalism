@@ -58,7 +58,7 @@ export const CategoryDropdown: React.FC<Props> = ({
             isOpen && "bg-white border-primary",
           )}
         >
-          <Link href={category.slug === "all" ? "/" : `/${category.slug}`}>
+          <Link prefetch href={category.slug === "all" ? "/" : `/${category.slug}`}>
             {category.name}
           </Link>
         </Button>
