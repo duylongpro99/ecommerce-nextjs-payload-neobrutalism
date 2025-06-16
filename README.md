@@ -43,3 +43,19 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 Then run the following command to forward Stripe events to your local server:
 ```stripe listen --forward-to localhost:3000/api/stripe/webhooks```
+
+
+
+## Features
+
+### Product Browsing
+![Product Listing](/demo/home.png)
+
+### Product Details
+![Product Detail](/demo/product-detail.png)
+
+### Authentication
+![Login Page](/demo/login.png)
+
+### Checkout
+![Checkout](/demo/checkout.png)
