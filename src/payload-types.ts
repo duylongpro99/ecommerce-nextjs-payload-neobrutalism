@@ -277,6 +277,13 @@ export interface Product {
    * If checked, this product will not be shown on the public storefront
    */
   isPrivated?: boolean | null;
+  refs?:
+    | {
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  isEnabledRefs?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -472,6 +479,13 @@ export interface ProductsSelect<T extends boolean = true> {
   content?: T;
   isArchived?: T;
   isPrivated?: T;
+  refs?:
+    | T
+    | {
+        url?: T;
+        id?: T;
+      };
+  isEnabledRefs?: T;
   updatedAt?: T;
   createdAt?: T;
 }
