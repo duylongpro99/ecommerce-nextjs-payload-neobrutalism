@@ -113,5 +113,42 @@ export const Products: CollectionConfig = {
             label: 'Is Enable Open Refs',
             type: 'checkbox',
         },
+
+        {
+            name: 'attachments',
+            label: 'Attachments',
+            type: 'array',
+            fields: [
+                {
+                    name: 'url',
+                    type: 'text',
+                    label: 'URL',
+                    required: true,
+                },
+                {
+                    name: 'type',
+                    type: 'select',
+                    options: [
+                        {
+                            label: 'Google Drive',
+                            value: 'google_drive',
+                        },
+                    ],
+                    label: 'Type',
+                    required: true,
+                },
+                {
+                    name: 'title',
+                    type: 'text',
+                    label: 'Title',
+                    required: true,
+                },
+                {
+                    name: 'description',
+                    type: 'text',
+                    label: 'Description',
+                },
+            ],
+        },
     ],
 };

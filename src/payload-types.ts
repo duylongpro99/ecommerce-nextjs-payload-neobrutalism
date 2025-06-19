@@ -284,6 +284,15 @@ export interface Product {
       }[]
     | null;
   isEnabledRefs?: boolean | null;
+  attachments?:
+    | {
+        url: string;
+        type: 'google_drive';
+        title: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -486,6 +495,15 @@ export interface ProductsSelect<T extends boolean = true> {
         id?: T;
       };
   isEnabledRefs?: T;
+  attachments?:
+    | T
+    | {
+        url?: T;
+        type?: T;
+        title?: T;
+        description?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
