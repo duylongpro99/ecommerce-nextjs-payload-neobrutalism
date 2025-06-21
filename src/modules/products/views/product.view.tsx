@@ -38,7 +38,6 @@ export const ProductView: React.FC<Props> = ({ id, tenantSlug }) => {
     );
 
     const [isCopied, setIsCopied] = useState(false);
-    console.log('data', data);
 
     return (
         <div className="px-4 lg:px-12 py-10">
@@ -153,15 +152,13 @@ export const ProductView: React.FC<Props> = ({ id, tenantSlug }) => {
                                 <h3 className="text-xl font-medium">Attachments</h3>
                                 <div className="grid grid-cols-1 gap-3 mt-4">
                                     {(data.attachments || []).map((attachment) => (
-                                        <>
-                                            <Attachment
-                                                key={attachment.id}
-                                                title={attachment.title}
-                                                subTitle={attachment.description ?? ''}
-                                                type={attachment.type}
-                                                url={attachment.url}
-                                            />
-                                        </>
+                                        <Attachment
+                                            key={attachment.id}
+                                            title={attachment.title}
+                                            subTitle={attachment.description ?? ''}
+                                            type={attachment.type}
+                                            url={attachment.url}
+                                        />
                                     ))}
                                 </div>
                             </div>

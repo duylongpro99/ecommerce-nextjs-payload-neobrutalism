@@ -10,6 +10,12 @@ export interface DriveFile {
     size?: string;
 }
 
+export interface ExtendedDriveFile extends DriveFile {
+    directLink: string;
+    embedLink: string;
+    isViewable: boolean;
+}
+
 export class GoogleDriveService {
     private drive;
 
@@ -49,7 +55,7 @@ export class GoogleDriveService {
     }
 
     // Get direct download link for public files
-    getDirectLink(fileId: string): string { 
+    getDirectLink(fileId: string): string {
         return `${process.env.GOOGLE_DRIVE_URL}/uc?export=download&id=${fileId}`;
     }
 
