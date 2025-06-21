@@ -1,8 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { LinkIcon } from 'lucide-react';
-import { Suspense, useState } from 'react';
+import { useState } from 'react';
 import { FileViewerDialog } from '../../files/components/file-viewer-dialog';
-import { Skeleton } from '@/components/ui/skeleton';
 
 type Props = {
     title: string;

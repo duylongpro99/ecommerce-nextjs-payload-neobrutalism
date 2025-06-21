@@ -33,11 +33,13 @@ export const FileViewerDialog: React.FC<Props> = ({ title, subTitle, url, type, 
                 <div className="flex-1">
                     {file ? (
                         <DriveFileViewer fileData={file} />
-                    ) : (
+                    ) : isLoading ? (
                         <div className="flex items-center justify-center p-8">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-400"></div>
                             <span className="ml-2 text-gray-600">Loading file...</span>
                         </div>
+                    ) : (
+                        <div className="italic text-gray-600">Cannot load provided file</div>
                     )}
                 </div>
 
