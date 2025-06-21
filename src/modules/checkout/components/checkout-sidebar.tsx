@@ -27,7 +27,7 @@ export const CheckoutSidebar: React.FC<Props> = ({
           disabled={disabled}
           onClick={onCheckout}
           size={"lg"}
-          className="text-base w-full text-white bg-primary hover:bg-pink-400 hover:text-primary"
+          className="text-base w-full text-white bg-primary hover:bg-cyan-400 hover:text-primary"
         >
           Checkout
         </Button>

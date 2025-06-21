@@ -142,7 +142,7 @@ export const SignUpView: React.FC = () => {
               type="submit"
               size="lg"
               variant="elevated"
-              className="bg-black text-white hover:bg-pink-400 hover:text-primary"
+              className="bg-black text-white hover:bg-cyan-400 hover:text-primary"
             >
               Create Store
             </Button>

@@ -138,7 +138,7 @@ export const ReviewForm: React.FC<Props> = ({ productId, intialData }) => {
             disabled={createReview.isPending || updateReview.isPending}
             type="submit"
             size="lg"
-            className="bg-black text-white hover:bg-pink-400 hover:text-primary w-fit"
+            className="bg-black text-white hover:bg-cyan-400 hover:text-primary w-fit"
           >
             {intialData ? "Update review" : "Post review"}
           </Button>
@@ -173,7 +173,7 @@ export const ReviewFormSekeleton: React.FC = () => {
         variant="elevated"
         type="button"
         size="lg"
-        className="bg-black text-white hover:bg-pink-400 hover:text-primary w-fit"
+        className="bg-black text-white hover:bg-cyan-400 hover:text-primary w-fit"
       >
         Post review
       </Button>

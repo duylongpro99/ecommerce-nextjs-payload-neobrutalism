@@ -82,7 +82,7 @@ export const ProductCard: React.FC<Props> = ({
                     )}
                 </div>
                 <div className="p-4">
-                    <div className="relative px-2 py-1 border bg-pink-400 w-fit">
+                    <div className="relative px-2 py-1 border bg-cyan-400 w-fit">
                         <p className="text-sm font-medium">{currency(price)}</p>
                     </div>
                 </div>

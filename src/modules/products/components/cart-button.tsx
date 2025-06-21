@@ -14,7 +14,7 @@ export const CartButton: React.FC<Props> = ({ tenantSlug, productId, isPurchased
 
     if (isPurchased) {
         return (
-            <Button variant={'elevated'} className="flex-1 font-medium bg-pink-400" asChild>
+            <Button variant={'elevated'} className="flex-1 font-medium bg-cyan-400" asChild>
                 <Link prefetch href={`${process.env.NEXT_PUBLIC_APP_URL}/library/${productId}`}>
                     View in Library
                 </Link>
@@ -25,7 +25,7 @@ export const CartButton: React.FC<Props> = ({ tenantSlug, productId, isPurchased
     return (
         <Button
             variant={'elevated'}
-            className={cn('flex-1 bg-pink-400', cart.isProductInCart(productId) && 'bg-white')}
+            className={cn('flex-1 bg-cyan-400', cart.isProductInCart(productId) && 'bg-white')}
             onClick={() => cart.toggleProduct(productId)}
         >
             {cart.isProductInCart(productId) ? 'Remove from cart' : 'Add to cart'}

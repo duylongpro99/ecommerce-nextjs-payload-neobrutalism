@@ -13,11 +13,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Fragment, useState } from 'react';
 import { toast } from 'sonner';
+import { Attachment } from '../components/attachment';
 
 const CartButton = dynamic(() => import('../components/cart-button').then((mod) => mod.CartButton), {
     ssr: false,
     loading: () => (
-        <Button disabled className="flex-1 bg-pink-400">
+        <Button disabled className="flex-1 bg-cyan-400">
             Add to cart
         </Button>
     ),
@@ -37,6 +38,7 @@ export const ProductView: React.FC<Props> = ({ id, tenantSlug }) => {
     );
 
     const [isCopied, setIsCopied] = useState(false);
+    console.log('data', data);
 
     return (
         <div className="px-4 lg:px-12 py-10">
@@ -51,7 +53,7 @@ export const ProductView: React.FC<Props> = ({ id, tenantSlug }) => {
                         </div>
                         <div className="border-y flex">
                             <div className="px-6 py-4 flex items-center justify-center border-r">
-                                <div className="px-2 py-1 border bg-pink-400 w-fit">
+                                <div className="px-2 py-1 border bg-cyan-400 w-fit">
                                     <p className="text-base font-medium">{currency(data.price)}</p>
                                 </div>
                             </div>
@@ -144,6 +146,23 @@ export const ProductView: React.FC<Props> = ({ id, tenantSlug }) => {
                                             </Fragment>
                                         );
                                     })}
+                                </div>
+                            </div>
+
+                            <div className="p-6 pt-0">
+                                <h3 className="text-xl font-medium">Attachments</h3>
+                                <div className="grid grid-cols-1 gap-3 mt-4">
+                                    {(data.attachments || []).map((attachment) => (
+                                        <>
+                                            <Attachment
+                                                key={attachment.id}
+                                                title={attachment.title}
+                                                subTitle={attachment.description ?? ''}
+                                                type={attachment.type}
+                                                url={attachment.url}
+                                            />
+                                        </>
+                                    ))}
                                 </div>
                             </div>
                         </div>

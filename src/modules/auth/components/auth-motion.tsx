@@ -4,7 +4,7 @@ export const AuthMotion = () => {
   return (
     <div className="relative h-full w-full bg-yellow-300 overflow-hidden flex items-center justify-center p-4">
       <motion.div
-        className="absolute w-32 h-32 bg-pink-400 border-4 border-black rounded-none"
+        className="absolute w-32 h-32 bg-cyan-400 border-4 border-black rounded-none"
         style={{ top: "10%", left: "10%" }}
         animate={{
           y: [0, -20, 0],
